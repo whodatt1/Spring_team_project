@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.myweb.www.repository.MediaFileDAO">
+	<insert id="insertMFile" parameterType="mfvo">
+		insert into media_file (uuid, save_dir, file_name, file_type, mno, file_size)
+		values (#{uuid},#{saveDir},#{fileName},#{fileType},#{mno},#{fileSize})
+	</insert>
+	<select id="selectListMFile" parameterType="long" resultType="mfvo">
+		select * from media_file where mno = #{mno}
+	</select>
+	<delete id="deleteMFile" parameterType="string">
+		delete from media_file where uuid = #{uuid}
+	</delete>
+	<delete id="deleteAllMFile" parameterType="long">
+		delete from media_file where mno= #{mno}
+	</delete>
+	<select id="selectOneMno" parameterType="string" resultType="long">
+		select mno from media_file where uuid = #{uuid}
+	</select>
+	<select id="selectOneMFileCount" parameterType="long" resultType="int">
+		select count(uuid) from media_file where mno = #{mno}
+	</select>
+	<select id="selectListAllMFiles" resultType="mfvo">
+		select * from media_file
+	</select>
+</mapper>

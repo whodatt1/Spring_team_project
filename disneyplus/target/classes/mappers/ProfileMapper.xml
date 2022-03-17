@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.myweb.www.repository.ProfileDAO">
+	<insert id="insertProfile" parameterType="pvo">
+		insert into profile (profile_name, icon, email, kids)
+		values (#{profileName}, #{icon}, #{email}, #{kids})
+	</insert>
+	<select id="loginProfile" parameterType="long" resultType="pvo">
+		select * from profile
+		where pno = #{pno}
+	</select>
+	<update id="updateProfile" parameterType="pvo">
+		update profile set
+		icon = #{icon}, kids = #{kids}, locked = #{locked}, profile_name = #{profileName}, pin = #{pin}
+		where pno = #{pno}
+	</update>
+	<delete id="deleteProfile" parameterType="long">
+		delete from profile where pno = #{pno}
+	</delete>
+	<delete id="deleteAllProfile" parameterType="string">
+		delete from profile where email = #{email}
+	</delete>
+	<select id="loginChoice" parameterType="string" resultType="pvo">
+		select * from profile where email = #{email}
+	</select>
+	<select id="checkPin" parameterType="long" resultType="int">
+		select pin from profile where pno = #{pno}
+	</select>
+</mapper>

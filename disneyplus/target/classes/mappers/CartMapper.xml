@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.myweb.www.repository.CartDAO">
+	<insert id="insertCart" parameterType="cvo">
+		insert into cart (gno, email, profile_name, address, gname, goods_img, total_price, purchase_count, company, kinds)
+		values (#{gno}, #{email}, #{profileName}, #{address}, #{gname}, #{goodsImg}, #{totalPrice}, #{purchaseCount}, #{company}, #{kinds})
+	</insert>
+	<select id="selectCartList" parameterType="cpgvo" resultType="cvo">
+		select a.cno, gno, goods_img, gname, address, total_price, purchase_count, company, kinds
+		from (
+			select cno from cart
+			where cno > 0 and email = #{email} and profile_name = #{profileName}
+			order by cno desc
+			limit #{pageStart}, #{qty}
+		) a left join cart b
+		on a.cno = b.cno
+	</select>
+	<delete id="deleteCart" parameterType="long">
+		delete from cart where cno = #{cno}
+	</delete>
+	<delete id="deleteAllCart">
+		delete from cart where email = #{email} and profile_name = #{profileName}
+	</delete>
+	<delete id="deleteAllMemberCart" parameterType="string">
+		delete from cart where email = #{email}
+	</delete>
+	<select id="selectCartTotalCount" resultType="int">
+		select count(cno) from cart where cno > 0
+	</select>
+</mapper>

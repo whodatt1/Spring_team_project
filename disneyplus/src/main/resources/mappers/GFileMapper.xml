@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.myweb.www.repository.GFileDAO">
+	<insert id="insertGFile" parameterType="gfvo">
+		insert into goods_file (uuid, save_dir, file_name, file_type, gno, file_size)
+		values(#{uuid}, #{saveDir}, #{fileName}, #{fileType}, #{gno}, #{fileSize})
+	</insert>
+	<select id="selectGFileList" parameterType="long" resultType="gfvo">
+		select * from goods_file where gno = #{gno}
+	</select>
+	<delete id="deleteGFile" parameterType="string">
+		delete from goods_file where uuid = #{uuid}
+	</delete>
+	<delete id="deleteAllGFile" parameterType="long">
+		delete from goods_file where gno = #{gno}
+	</delete>
+	<select id="selectAllGFileList" resultType="gfvo">
+		select * from goods_file
+	</select>
+</mapper>

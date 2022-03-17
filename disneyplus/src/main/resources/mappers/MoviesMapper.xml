@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <mapper namespace="com.myweb.www.repository.MovieDAO">
+  
+  <insert id="insertMovies" parameterType="mvo">
+  	insert into media (title, description, description2, company, genre, movie, opening_year, director, actor, age_limit, media, poster_img, bg_img)
+	values (#{title},#{description}, #{description2}, #{company},#{genre},#{movie},#{openingYear},#{director},#{actor}, #{ageLimit},#{media},#{posterImg},#{bgImg})  
+  </insert>
+  
+  <select id="selectListMovies" resultType="mvo">
+  	select mno, poster_img
+  	from media
+  	where movie = true
+  </select>
+  
+  <select id="selectListGenre" resultType="mvo">
+  	select mno, poster_img
+  	from media
+  	where movie = true and genre=#{genre}
+  	limit #{pgvo.pageStart}, #{pgvo.qty}
+  		
+  </select>
+  
+  <select id="selectOneMovies" parameterType="long" resultType="mvo">
+  	select * from media where mno = #{mno}
+  </select>
+  
+  <update id="updateMovies" parameterType="mvo">
+  	update media set
+  	title = #{title}, description = #{description}, company = #{company}, genre = #{genre},
+  	 movie = #{movie}, opening_year = #{openingYear}, age_limit = #{ageLimit}, media = #{media},
+  	 description2 = #{description2}, actor = #{actor}, director = #{director}, poster_img = #{posterImg}, bg_img=#{bgImg}
+  	  where mno = #{mno}
+  </update>
+  
+  <delete id="deleteMovies" parameterType="long" >
+  	delete from media where mno = #{mno}
+  </delete>
+  
+  <select id="playMovies" parameterType="long" resultType="string">
+  	select media from media where mno=#{mno}
+  </select>
+  
+  
+  <select id="selectListMoviePaging" parameterType="pgvo" resultType="mvo">
+  	select mno, poster_img from media
+  	where genre = #{genre} and movie=true
+  	limit #{pageStart}, #{qty}
+  </select>
+  
+  <select id="selectOneMno" resultType="long">
+  	select max(mno) from media
+  </select>
+  
+  <select id="selectOneTotalCount" parameterType="pgvo" resultType="int">
+  	select count(mno) from media where genre=#{genre} and movie = true
+  </select>
+  
+  <update id="updateMediaRC">
+  	update media set read_count = read_count + #{cnt} where mno = #{mno}
+  </update>
+  
+  <select id="selectBrand" parameterType="string" resultType="mvo">
+  	select mno, poster_img, movie from media
+  	where company= #{company}
+  </select>
+  </mapper>

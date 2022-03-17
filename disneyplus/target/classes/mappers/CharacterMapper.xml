@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <mapper namespace="com.myweb.www.repository.CharacterDAO">
+  
+  <insert id="insertCharacter" parameterType="chvo">
+  	insert into m_char(mno, character_name)
+  	values(#{mno},#{characterName})
+  </insert>
+  
+  <select id="selectAllCharacter" parameterType="long" resultType="chvo">
+  	select * from m_char where mno=#{mno}
+  </select>
+  
+  <delete id="deleteCharacterAll" parameterType="long">
+  	delete from m_char where mno = #{mno}
+  </delete>
+  
+  <delete id="deleteCharacterOne" parameterType="long">
+  	delete from m_char where chno=#{chno}
+  </delete>
+  </mapper>

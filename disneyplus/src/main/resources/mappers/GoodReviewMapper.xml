@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.myweb.www.repository.GoodsReviewDAO">
+	<insert id="insertGoodsReview" parameterType="grvo">
+		insert into goods_review (gno, email, profile_name, content, score)
+		values (#{gno}, #{email}, #{profileName}, #{content}, #{score})
+	</insert>
+	<select id="selectListGoodsReview" resultType="grvo">
+		select a.grno, email, profile_name, content, score, mod_at
+		from (
+			select grno from goods_review
+			where gno = #{gno}
+			limit #{pgvo.pageStart}, #{pgvo.qty}
+		) a inner join goods_review b
+		on a.grno = b.grno
+	</select>
+	<delete id="deleteGoodsReview" parameterType="long">
+		delete from goods_review where grno = #{grno}
+	</delete>
+	<delete id="deleteAllGoodsReview" parameterType="long">
+		delete from goods_review where gno = #{gno}
+	</delete>
+	<select id="selectOneGno" parameterType="long" resultType="long">
+		select gno from goods_review where grno = #{grno}
+	</select>
+	<select id="selectOneGoodsReviewTotalCount" resultType="int">
+		select count(grno) from goods_review where gno = #{gno}
+	</select>
+</mapper>

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.myweb.www.repository.GoodsDAO">
+	<insert id="insertGoods" parameterType="gvo">
+		insert into goods (gname, description, company, kinds, price, goods_img)
+		values (#{gname}, #{description}, #{company}, #{kinds}, #{price}, #{goodsImg})
+	</insert>
+	<sql id="category">
+		<if test="company != null">
+			<choose>
+				<when test="kinds == null">
+					and company = #{company}
+				</when>
+				<when test="kinds != null">
+					and company = #{company} and kinds = #{kinds}
+				</when>
+			</choose>
+		</if>
+	</sql>
+	<select id="selectGoodsList" parameterType="cpgvo" resultType="gvo">
+		select a.gno, gname, company, kinds, price, goods_img, cmt_qty
+		from (
+			select gno from goods
+			where gno > 0 <include refid="category"></include>
+			order by gno desc
+			limit #{pageStart}, #{qty}
+		) a left join goods b
+		on a.gno = b.gno
+	</select>
+	<select id="selectOneGoods" parameterType="long" resultType="gvo">
+		select * from goods where gno = #{gno}
+	</select>
+	<update id="updateGoods" parameterType="gvo">
+		update goods set
+		gname = #{gname}, description = #{description},
+		company = replace(#{company}, ',', ''), kinds = replace(#{kinds}, ',', ''),
+		mod_at = now(), price = #{price},
+		goods_img = #{goodsImg}
+		where gno = #{gno}
+	</update>
+	<delete id="deleteGoods" parameterType="long">
+		delete from goods where gno = #{gno}
+	</delete>
+	<select id="selectOneGno" resultType="long">
+		select max(gno) from goods
+	</select>
+	<update id="updateGoodsReadCount">
+		update goods set read_count = read_count + #{cnt} where gno = #{gno}
+	</update>
+	<select id="selectOneGoodsTotalCount" parameterType="cpgvo" resultType="int">
+		select count(gno) from goods where gno > 0	
+		<include refid="category"></include>
+	</select>
+	<update id="updateGoodsReviewCount">
+		update goods set
+		cmt_qty = cmt_qty + #{cnt}
+		where gno = #{gno}
+	</update>
+</mapper>

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.myweb.www.repository.MemberDAO">
+	<insert id="insertMember" parameterType="memvo">
+		insert into member (email, pwd, reg_at)
+		values (#{email}, #{pwd}, now())
+	</insert>
+	<select id="selectOneMember" parameterType="string" resultType="memvo">
+		select * from member where email = #{email}
+	</select>
+	<select id="selectAllMember" resultType="memvo">
+		select email, grade, reg_at, last_login, profile_limit from member
+	</select>
+	<update id="updateMember" parameterType="memvo">
+		update member
+		set pwd = #{pwd} where email = #{email}
+	</update>
+	<delete id="deleteMember" parameterType="memvo">
+		delete from member where email = #{email} and pwd = #{pwd}
+	</delete>
+	<update id="lastLoginMember" parameterType="string">
+		update member set last_login = now() where email = #{email}
+	</update>
+	
+	<insert id="insertAuthInit" parameterType="string">
+		insert into auth_member values (#{email}, 'ROLE_USER')
+	</insert>
+	<select id="selectAuths" parameterType="string" resultType="authVO">
+		select * from auth_member where email = #{email}
+	</select>
+	<select id="selectLogin" parameterType="memvo" resultType="memvo">
+		select email, grade, last_login, profile_limit
+		from member
+		where email = #{email} and pwd = #{pwd}
+	</select>
+	<select id="selectExist" parameterType="string" resultType="int">
+		select count(email) from member
+		where email = #{email}
+	</select>
+	<update id="updateProfileLimit" parameterType="string">
+		update member 
+		set profile_limit = profile_limit - 1 
+		where email = #{email}
+	</update>
+	<update id="updateDeleteProfileLimit" parameterType="string">
+		update member 
+		set profile_limit = profile_limit + 1 
+		where email = #{email}
+	</update>
+	<select id="checkPwd" parameterType="string" resultType="string">
+		select pwd from member where email = #{email}
+	</select>
+</mapper>

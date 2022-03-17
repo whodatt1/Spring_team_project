@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.myweb.www.repository.WatchListDAO">
+	<insert id="insertWatchList" parameterType="wvo">
+		insert into watch_list (mno, email, title, profile_name, poster_img)
+		values (#{mno}, #{email}, #{title}, #{profileName}, #{posterImg})
+	</insert>
+	<delete id="deleteWatchList" parameterType="long">
+		delete from watch_list
+		where wno = #{wno}
+	</delete>
+	<select id="selectWatchList" parameterType="cpgvo" resultType="wvo">
+		select a.wno, mno, poster_img
+		from (
+			select wno from watch_list
+			where wno > 0 and email = #{email} and profile_name = #{profileName}
+			order by wno desc
+			limit #{pageStart}, #{qty}
+		) a left join watch_list b
+		on a.wno = b.wno
+	</select>
+	<select id="selectWatchListTotalCount" resultType="int">
+		select count(wno) from watch_list where mno > 0
+	</select>
+	<select id="selectAccountWatchList" parameterType="wvo" resultType="wvo">
+		select *
+		from watch_list where mno = #{mno} and email = #{email} and profile_name = #{profileName}
+	</select>
+	<delete id="deleteAllWatchList">
+		delete from watch_list where email = #{email} and profile_name = #{profileName}
+	</delete>
+	<delete id="deleteAllMemberWatchList">
+		delete from watch_list where email = #{email}
+	</delete>
+</mapper>

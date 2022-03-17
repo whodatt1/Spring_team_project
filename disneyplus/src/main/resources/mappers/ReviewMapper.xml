@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.myweb.www.repository.ReviewDAO">
+	<insert id="insertMediaReview" parameterType="rvo">
+		insert into review (mno, email, profile_name, content, score)
+		values (#{mno}, #{email}, #{profileName}, #{content}, #{score})
+	</insert>
+	<select id="selectListMediaReview" resultType="rvo">
+		select a.rno, email, profile_name, content, score, mod_at
+		from (
+			select rno from review
+			where mno = #{mno}
+			limit #{pgvo.pageStart}, #{pgvo.qty}
+		) a inner join review b
+		on a.rno = b.rno
+	</select>
+	<delete id="deleteMediaReview" parameterType="long">
+		delete from review where rno = #{rno}
+	</delete>
+	<delete id="deleteAllMediaReview" parameterType="long">
+		delete from review where mno = #{mno}
+	</delete>
+	<select id="selectOneMno" parameterType="long" resultType="long">
+		select mno from review where rno = #{rno}
+	</select>
+	<select id="selectOneMediaReviewTotalCount" resultType="int">
+		select count(rno) from review where mno = #{mno}
+	</select>
+</mapper>

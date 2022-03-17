@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <mapper namespace="com.myweb.www.repository.SeriesDAO">
+  	<insert id="insertSeries" parameterType="mvo">
+  		insert into media (title, description, description2, company, genre, movie, opening_year, director, actor, age_limit, media, bg_img, poster_img,season)
+		values (#{title},#{description},#{description2}, #{company},#{genre},#{movie},#{openingYear},#{director}, #{actor},#{ageLimit},#{media},#{bgImg},#{posterImg},#{season})
+  	</insert>
+  	
+  	<select id="selectListSeries" resultType="mvo">
+  		select mno, poster_img
+  		from media
+  		where movie = false
+  	</select>
+  	
+  	<select id="selectOneSeries" parameterType="long" resultType="mvo">
+  		select * from media where mno = #{mno}
+  	</select>
+  	
+  	<update id="updateSeries" parameterType="mvo">
+  	update media set
+  	title = #{title}, description = #{description}, company = #{company}, genre = #{genre},
+  	 movie = #{movie}, opening_year = #{openingYear}, age_limit = #{ageLimit}, media = #{media},
+  	  bg_img = #{bgImg}, poster_img = #{posterImg}, description2= #{description2}, director=#{director}, actor=#{actor}, season=#{season}
+  	  where mno = #{mno}
+  </update>
+  
+  <delete id="deleteSeries" parameterType="long">
+  	delete from media where mno = #{mno}
+  </delete>
+  
+  <select id="selectOneMno" resultType="long">
+  	select max(mno) from media
+  </select>
+  
+  <select id="selectListSeriesPaging" parameterType="pgvo" resultType="mvo">
+  	select mno,poster_img from media
+  	where genre = #{genre} and movie=false
+  	limit #{pageStart}, #{qty}
+  </select>
+  
+  <select id="selectOneTotalCount" parameterType="pgvo" resultType="int">
+  	select count(mno) from media where genre=#{genre} and movie = false
+  </select>
+  
+  <select id="selectListGenre" resultType="mvo">
+  	select mno, poster_img
+  	from media
+  	where movie = false and genre=#{genre}
+  	limit #{pgvo.pageStart}, #{pgvo.qty}
+  </select>
+
+  
+  <insert id="insertSeason" parameterType="svo">
+  	insert into season (title, season, media, thumbnail, description, mno)
+  	values (#{title}, #{season}, #{media}, #{thumbnail}, #{description}, #{mno})
+  </insert>
+  
+  <select id="selectListSeason" resultType="svo">
+  	select * from season where mno = #{mno} and season = #{season}
+  </select>
+  
+  <select id="playSeason" parameterType="long" resultType="string">
+  	select media from season where sno=#{sno}
+  </select>
+  
+  <select id="selectOneSeason" parameterType="long" resultType="svo">
+  	select * from season where sno = #{sno}
+  </select>
+  
+  <update id="updateSeason" parameterType="svo">
+  	update season set
+  	title = #{title}, season= #{season}, media= #{media}, thumbnail= #{thumbnail},
+  	description= #{description}
+  	where sno = #{sno}
+  </update>
+  
+  <delete id="deleteSeason" parameterType="long">
+  	delete from season where sno =#{sno}
+  </delete>
+  
+  <delete id="deleteAllSeason" parameterType="long">
+  	delete from season where mno = #{mno}
+  </delete>
+  
+  </mapper>
