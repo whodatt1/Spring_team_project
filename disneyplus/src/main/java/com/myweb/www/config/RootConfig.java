@@ -33,9 +33,9 @@ public class RootConfig {
 	public DataSource dataSource() {
 		HikariConfig hikariConfig = new HikariConfig();
 		hikariConfig.setDriverClassName("com.mysql.jdbc.Driver");
-		hikariConfig.setJdbcUrl("jdbc:mysql://localhost:3306/codingman875");
-		hikariConfig.setUsername("codingman875");
-		hikariConfig.setPassword("wlsh486901");
+		hikariConfig.setJdbcUrl("jdbc:mysql://localhost:3306/");
+		hikariConfig.setUsername("");
+		hikariConfig.setPassword("");
 		hikariConfig.setMinimumIdle(5);
 		
 		hikariConfig.setConnectionTestQuery("SELECT now()");
